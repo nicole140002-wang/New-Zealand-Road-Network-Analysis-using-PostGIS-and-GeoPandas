@@ -205,10 +205,6 @@ The resulting dataset contains:
 - Corresponding SA1 identifier
 - Attributes inherited from both datasets
 
-<img width="860" height="207" alt="image" src="https://github.com/user-attachments/assets/d41f8460-c8b3-4109-9d1d-0df3e0ceee6d" />
-<img width="908" height="200" alt="image" src="https://github.com/user-attachments/assets/28b8a926-5e9b-4822-8903-4b3f0a705f61" />
-<img width="694" height="212" alt="image" src="https://github.com/user-attachments/assets/2fc13114-abc2-431b-9633-6c993805fccb" />
-
 2) Calculate Road Segment Length
 Because the data is stored in NZTM2000 projection (EPSG:2193), geometric length calculations are performed in metres.
 
