@@ -9,6 +9,23 @@
 - GeoJSON
 - QGIS
 
+## Workflow
+
+A[LINZ Road Network Shapefile] --> B[PostGIS Database]
+
+C[Stats NZ SA1 2025 Boundaries] --> D[PostGIS Database]
+
+B --> E[GeoPandas Processing]
+D --> E
+
+E --> F[Spatial Intersection]
+F --> G[Road Length Aggregation]
+
+G --> H[Road Density Calculation]
+
+H --> I[QGIS Visualization]
+H --> J[GeoJSON Export]
+
 ## Step 1. Spatial Database Setup 
 A Linux-based spatial database environment was established using **VM, PostgreSQL 18, and PostGIS 3.6 (18)**. The PostGIS extension was enabled to support spatial data storage, indexing, and spatial SQL operations. GDAL was installed through **Conda** to provide the **ogr2ogr** data conversion utility. 
 
