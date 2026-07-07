@@ -15,6 +15,9 @@ A Linux-based spatial database environment was established using **VM, PostgreSQ
 ## Step 2. Import Road Network Data into PostGIS 
 The New Zealand **road network** dataset obtained from **LINZ** was converted and imported into the PostGIS database as the primary spatial dataset for subsequent spatial analysis.
 The data import process was performed using `ogr2ogr`, a GDAL command-line utility for spatial data format conversion and database loading.
+
+<img width="763" height="647" alt="image" src="https://github.com/user-attachments/assets/afa1b3d3-0200-42b3-a70d-a317a1667993" />
+
 Example command:
 ```bash
 ogr2ogr -f "PostgreSQL" \
