@@ -97,3 +97,35 @@ UPDATE nz_addresses_roads
 SET road_length = ST_Length(geom::geography);
 ```
 <img width="360" height="395" alt="image" src="https://github.com/user-attachments/assets/745f3bdf-fcfd-4362-ae60-a61d0fce06a8" />
+
+## Step 4. Connect PostGIS with Python
+Python was integrated with the PostGIS database using **SQLAlchemy** and GeoPandas. A database connection was established to retrieve the road network table as a GeoDataFrame for further spatial processing and analysis.  
+
+The analysis geometry was transformed to NZTM2000 (EPSG:2193) and stored as geom_2193 for metric-based spatial analysis.
+
+Example workflow:
+
+```python
+# Python connection to PostgreSQL/PostGIS database
+# Database: git_sample
+# Dataset: LINZ New Zealand road network
+
+import geopandas as gpd
+from sqlalchemy import create_engine
+
+# Create a connection to the PostgreSQL database
+engine = create_engine(
+    "postgresql://<username>:<password>@<host>:<port>/<database>"
+)
+
+# Read road network data from PostGIS into a GeoDataFrame
+roads_gdf = gpd.read_postgis(
+    "SELECT * FROM nz_addresses_roads",
+    engine,
+    geom_col="geom_2193"
+)
+
+print(roads_gdf.columns)
+```
+<img width="866" height="539" alt="image" src="https://github.com/user-attachments/assets/c7ea3f65-d82e-4688-aaf3-167313720eab" />
+
