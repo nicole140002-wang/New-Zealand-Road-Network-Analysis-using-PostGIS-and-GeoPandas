@@ -224,3 +224,8 @@ sa1_gdf['road_density']
 ```
 
 <img width="169" height="227" alt="image" src="https://github.com/user-attachments/assets/9158e02e-22c1-42d4-8c27-455e45ea670a" />
+
+## Step7. QGIS Visualization
+Visualize the calculated road density results to evaluate spatial patterns and communicate the analysis outcomes through thematic mapping.
+
+<img width="515" height="644" alt="image" src="https://github.com/user-attachments/assets/c4318634-74af-4630-9750-ee0843a9454e" />
