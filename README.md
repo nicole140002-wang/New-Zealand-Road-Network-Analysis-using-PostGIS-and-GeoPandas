@@ -32,7 +32,7 @@ PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
 ## Step 3. Exploratory Spatial SQL Analysis
 Before performing spatial analysis, the road network dataset was explored using PostGIS SQL queries to understand its structure, attributes, geometry characteristics, and data quality.  
 
-### 1. Count the Total Number of Road Features
+### 1) Count the Total Number of Road Features
 
 The total number of road segments was calculated to understand the dataset size.
 
@@ -42,7 +42,7 @@ FROM nz_addresses_roads;
 ```
 <img width="425" height="197" alt="image" src="https://github.com/user-attachments/assets/b8e5f70a-c51f-41b5-95b8-260c9e949e58" />
 
-### 2. Preview Sample Records
+### 2) Preview Sample Records
 
 ```sql
 SELECT *
@@ -51,7 +51,7 @@ LIMIT 100;
 ```
 <img width="997" height="611" alt="image" src="https://github.com/user-attachments/assets/eeba9875-5c47-410c-b541-3aa04b8a6c9d" />
 
-### 3. Check Coordinate Reference System (CRS)
+### 3) Check Coordinate Reference System (CRS)
 
 
 ```sql
@@ -63,7 +63,7 @@ LIMIT 5;
 4167
 ```
 
-### 4. Check Geometry Types
+### 4) Check Geometry Types
 
 The geometry types stored in the road network table were examined to verify the spatial data structure.
 
@@ -76,7 +76,7 @@ FROM nz_addresses_roads;
 ```text
 ST_MultiLineString
 ```
-### 5. Spatial Data Preparation
+### 5) Spatial Data Preparation
 Transform EPSG:4167 → EPSG:2193
 
 ```sql
@@ -87,7 +87,7 @@ UPDATE nz_addresses_roads
 SET geom_2193 = ST_Transform(geom,2193);
 ```
 
-### 6. Calculate Total Road Network Length
+### 6) Calculate Total Road Network Length
 
 ```sql
 ALTER TABLE nz_addresses_roads
