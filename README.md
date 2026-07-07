@@ -24,6 +24,6 @@ PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
 -overwrite \
 -lco GEOMETRY_NAME=geom \
 -nlt PROMOTE_TO_MULTI
-
+```
 
 ## Step 3.
