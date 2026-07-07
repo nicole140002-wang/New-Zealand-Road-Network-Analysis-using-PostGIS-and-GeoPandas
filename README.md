@@ -100,8 +100,6 @@ LIMIT 5;
 
 The geometry types stored in the road network table were examined to verify the spatial data structure.
 
-<img width="371" height="191" alt="image" src="https://github.com/user-attachments/assets/e275bf4a-0bb2-4ab8-a5de-9ea73bfa0396" />
-
 ```sql
 SELECT DISTINCT ST_GeometryType(geom)
 FROM nz_addresses_roads;
@@ -129,7 +127,6 @@ ADD COLUMN road_length float;
 UPDATE nz_addresses_roads
 SET road_length = ST_Length(geom::geography);
 ```
-<img width="360" height="395" alt="image" src="https://github.com/user-attachments/assets/745f3bdf-fcfd-4362-ae60-a61d0fce06a8" />
 
 ## Step 4. Connect PostGIS with Python
 Python was integrated with the PostGIS database using **SQLAlchemy** and GeoPandas. A database connection was established to retrieve the road network table as a GeoDataFrame for further spatial processing and analysis.  
