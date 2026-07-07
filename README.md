@@ -12,9 +12,10 @@
 ## Step 1. Spatial Database Setup 
 A Linux-based spatial database environment was established using **VM, PostgreSQL 18, and PostGIS 3.6 (18)**. The PostGIS extension was enabled to support spatial data storage, indexing, and spatial SQL operations. GDAL was installed through **Conda** to provide the **ogr2ogr** data conversion utility. 
 
-## Step 2. Import Road Network Data into PostGIS 
-The New Zealand **road network** dataset obtained from **LINZ** was converted and imported into the PostGIS database as the primary spatial dataset for subsequent spatial analysis.
-The data import process was performed using `ogr2ogr`, a GDAL command-line utility for spatial data format conversion and database loading.
+## Step 2. Import Road Network and SA1 Data into PostGIS 
+The New Zealand road network dataset obtained from LINZ and the Statistical Area 1 (SA1) boundary dataset obtained from Stats NZ were converted from Shapefile format and imported into a PostGIS database as the primary spatial datasets for subsequent spatial analysis.
+
+The data import process was performed using `ogr2ogr`, a GDAL command-line utility designed for vector data format conversion and loading spatial data into spatial databases.
 
 <img width="763" height="647" alt="image" src="https://github.com/user-attachments/assets/afa1b3d3-0200-42b3-a70d-a317a1667993" />
 
@@ -24,6 +25,17 @@ ogr2ogr -f "PostgreSQL" \
 PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
 /path/to/nz-addresses-roads.shp \
 -nln public.nz_addresses_roads \
+-overwrite \
+-lco GEOMETRY_NAME=geom \
+-nlt PROMOTE_TO_MULTI
+
+<img width="487" height="648" alt="image" src="https://github.com/user-attachments/assets/914916cb-cb07-4702-bebc-34d5771cfc26" />
+
+
+ogr2ogr -f "PostgreSQL" \
+PG:"host=localhost dbname=git_sample user=wwj_postgis password=123456" \
+/home/postgres/statsnz-statistical-area-1-2025-SHP/statistical-area-1-2025.shp \
+-nln public.statistical-area-1-2025 \
 -overwrite \
 -lco GEOMETRY_NAME=geom \
 -nlt PROMOTE_TO_MULTI
@@ -159,3 +171,48 @@ mean 1561.8530384064586
 ```python
 roads_gdf.geom_2193.isnull().sum()
 ```
+
+## Step 6. Spatial Overlay and Road Density Analysis
+Integrate the road network with Statistical Area 1 (SA1) boundaries to calculate road distribution and road density at the small-area level.
+Instead of simply assigning roads to SA1 polygons using a spatial join, this step applies spatial intersection to split road geometries at SA1 boundaries. This ensures that road lengths are accurately allocated to the corresponding statistical areas.  
+
+1) Spatial Intersection between Roads and SA1
+
+```python
+roads_sa1_gdf = gpd.overlay(roads_gdf, sa1_gdf, how="intersection")
+```
+The resulting dataset contains:
+
+- Road segment geometry
+- Corresponding SA1 identifier
+- Attributes inherited from both datasets
+
+<img width="860" height="207" alt="image" src="https://github.com/user-attachments/assets/d41f8460-c8b3-4109-9d1d-0df3e0ceee6d" />
+<img width="908" height="200" alt="image" src="https://github.com/user-attachments/assets/28b8a926-5e9b-4822-8903-4b3f0a705f61" />
+<img width="694" height="212" alt="image" src="https://github.com/user-attachments/assets/2fc13114-abc2-431b-9633-6c993805fccb" />
+
+2) Calculate Road Segment Length
+Because the data is stored in NZTM2000 projection (EPSG:2193), geometric length calculations are performed in metres.
+
+```python
+roads_sa1_gdf["roads_length_intersected"] = roads_sa1_gdf["geometry"].length
+```
+<img width="202" height="488" alt="image" src="https://github.com/user-attachments/assets/d95ea783-396e-4ec2-ba36-0bcbed27db1a" />
+
+3) Aggregate Road Length by SA1
+Road segments were aggregated by SA1 identifier to calculate the total road length within each statistical area.
+
+```python
+road_summary = roads_sa1_gdf.groupby("sa12025_v1").agg(
+    total_road_length=('roads_length_intersected', 'sum')).reset_index()
+```
+<img width="307" height="359" alt="image" src="https://github.com/user-attachments/assets/30a58445-769b-4052-a105-63ef5166fa2b" />
+
+4) Calculate Road Density
+
+```python
+sa1_gdf['road_density'] = sa1_gdf['total_road_length'] / sa1_gdf['geom'].area
+sa1_gdf['road_density']
+```
+
+<img width="169" height="227" alt="image" src="https://github.com/user-attachments/assets/9158e02e-22c1-42d4-8c27-455e45ea670a" />
