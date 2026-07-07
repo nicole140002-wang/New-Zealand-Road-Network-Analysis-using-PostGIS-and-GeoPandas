@@ -157,8 +157,6 @@ roads_gdf = gpd.read_postgis(
 
 print(roads_gdf.columns)
 ```
-<img width="866" height="539" alt="image" src="https://github.com/user-attachments/assets/c7ea3f65-d82e-4688-aaf3-167313720eab" />
-
 ## Step 5. Exploratory Spatial Analysis Using GeoPandas
 After connecting Python with the PostGIS database, GeoPandas was used to explore the road network dataset and understand its spatial characteristics, attribute structure, and data quality.
 
@@ -211,8 +209,6 @@ Because the data is stored in NZTM2000 projection (EPSG:2193), geometric length 
 ```python
 roads_sa1_gdf["roads_length_intersected"] = roads_sa1_gdf["geometry"].length
 ```
-<img width="202" height="488" alt="image" src="https://github.com/user-attachments/assets/d95ea783-396e-4ec2-ba36-0bcbed27db1a" />
-
 3) Aggregate Road Length by SA1
 Road segments were aggregated by SA1 identifier to calculate the total road length within each statistical area.
 
@@ -220,8 +216,6 @@ Road segments were aggregated by SA1 identifier to calculate the total road leng
 road_summary = roads_sa1_gdf.groupby("sa12025_v1").agg(
     total_road_length=('roads_length_intersected', 'sum')).reset_index()
 ```
-<img width="307" height="359" alt="image" src="https://github.com/user-attachments/assets/30a58445-769b-4052-a105-63ef5166fa2b" />
-
 4) Calculate Road Density
 
 ```python
