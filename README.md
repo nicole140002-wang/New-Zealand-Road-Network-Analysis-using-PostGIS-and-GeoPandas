@@ -40,6 +40,7 @@ The data import process was performed using `ogr2ogr`, a GDAL command-line utili
 <img width="763" height="647" alt="image" src="https://github.com/user-attachments/assets/afa1b3d3-0200-42b3-a70d-a317a1667993" />
 
 Example command:
+
 ```bash
 ogr2ogr -f "PostgreSQL" \
 PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
@@ -48,10 +49,10 @@ PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
 -overwrite \
 -lco GEOMETRY_NAME=geom \
 -nlt PROMOTE_TO_MULTI
-
+```
 <img width="487" height="648" alt="image" src="https://github.com/user-attachments/assets/914916cb-cb07-4702-bebc-34d5771cfc26" />
 
-
+```bash
 ogr2ogr -f "PostgreSQL" \
 PG:"host=localhost dbname=git_sample user=wwj_postgis password=123456" \
 /home/postgres/statsnz-statistical-area-1-2025-SHP/statistical-area-1-2025.shp \
