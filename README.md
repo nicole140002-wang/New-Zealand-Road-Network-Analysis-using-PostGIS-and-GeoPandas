@@ -32,7 +32,7 @@ PG:"host=localhost dbname=git_sample user=<username> password=<password>" \
 ## Step 3. Exploratory Spatial SQL Analysis
 Before performing spatial analysis, the road network dataset was explored using PostGIS SQL queries to understand its structure, attributes, geometry characteristics, and data quality.  
 
-### 1) Count the Total Number of Road Features
+1) Count the Total Number of Road Features
 
 The total number of road segments was calculated to understand the dataset size.
 
@@ -42,7 +42,7 @@ FROM nz_addresses_roads;
 ```
 <img width="425" height="197" alt="image" src="https://github.com/user-attachments/assets/b8e5f70a-c51f-41b5-95b8-260c9e949e58" />
 
-### 2) Preview Sample Records
+2) Preview Sample Records
 
 ```sql
 SELECT *
@@ -51,7 +51,7 @@ LIMIT 100;
 ```
 <img width="997" height="611" alt="image" src="https://github.com/user-attachments/assets/eeba9875-5c47-410c-b541-3aa04b8a6c9d" />
 
-### 3) Check Coordinate Reference System (CRS)
+3) Check Coordinate Reference System (CRS)
 
 
 ```sql
@@ -63,7 +63,7 @@ LIMIT 5;
 4167
 ```
 
-### 4) Check Geometry Types
+4) Check Geometry Types
 
 The geometry types stored in the road network table were examined to verify the spatial data structure.
 
@@ -76,7 +76,7 @@ FROM nz_addresses_roads;
 ```text
 ST_MultiLineString
 ```
-### 5) Spatial Data Preparation
+5) Spatial Data Preparation
 Transform EPSG:4167 → EPSG:2193
 
 ```sql
@@ -87,7 +87,7 @@ UPDATE nz_addresses_roads
 SET geom_2193 = ST_Transform(geom,2193);
 ```
 
-### 6) Calculate Total Road Network Length
+6) Calculate Total Road Network Length
 
 ```sql
 ALTER TABLE nz_addresses_roads
@@ -129,3 +129,33 @@ print(roads_gdf.columns)
 ```
 <img width="866" height="539" alt="image" src="https://github.com/user-attachments/assets/c7ea3f65-d82e-4688-aaf3-167313720eab" />
 
+## Step 5. Exploratory Spatial Analysis Using GeoPandas
+After connecting Python with the PostGIS database, GeoPandas was used to explore the road network dataset and understand its spatial characteristics, attribute structure, and data quality.
+
+1) Explore Spatial Extent
+The bounding box of the road network was calculated using GeoPandas to understand the geographic coverage of the dataset.
+
+```text
+array([1114406.69907759, 4793577.86861259, 2467495.46022585,
+       6190127.52043692])
+```
+
+2) Calculate Road Segment Length
+Road segment lengths were calculated from the projected geometry. The results were stored as a new attribute for further analysis. Summary statistics were calculated:
+
+```text
+max 2145095.1329076597
+min 8.087625506798597
+mean 1561.8530384064586
+95th percentile 6420.3725884673295
+```
+
+3) Visualize Road Length Distribution
+
+<img width="868" height="545" alt="image" src="https://github.com/user-attachments/assets/cb6d9664-b8c8-45d7-b41c-e1bd783751b7" />
+
+5) Check Missing Values
+
+```python
+roads_gdf.geom_2193.isnull().sum()
+```
